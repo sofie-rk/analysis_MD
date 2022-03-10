@@ -12,14 +12,14 @@ class ProteinStructure:
 
         self.protein_structure = mda.Universe("./raw_files/"+path_file_gro, "./raw_files/"+path_file_xtc)
 
-    def radius_of_gyration(self):
+    def r_gyr(self):
         rgyr = []
         time = []
+        protein = self.protein_structure.select_atoms('protein')
         for t in self.protein_structure.trajectory:
             time.append(self.protein_structure.trajectory.time)
-            rgyr.append(self.protein_structure.atoms.radius_of_gyration())
-
-        # CONSTRUCTING DATA FRAME
+            rgyr.append(protein.radius_of_gyration())
+        
         rgyr_df = pd.DataFrame(rgyr, columns=['Radius of gyration [Å]'], index=time)
         rgyr_df.index.name = 'Time [ps]'
 
