@@ -13,4 +13,5 @@ def construct_plot(dfs, colors, labels):
     plt.title("Radius of gyration - comparing force fields")
     plt.legend()
     plt.grid(True)
+    plt.xlim(0,200)
     plt.show()
