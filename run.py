@@ -2,25 +2,24 @@ import MDAnalysis as mda
 from ProteinStructure import *
 import matplotlib.pyplot as plt
 
-from construct_plots import construct_plot
+#from construct_plots import construct_plot
+from construct_plots import rgyr_plot
 
 
-OPLS1 = ProteinStructure('OPLS_sc1.gro', 'OPLS_sc1.xtc', "OPLS neutral", "blue")
-OPLS2 = ProteinStructure('OPLS_sc2.gro', 'OPLS_sc2.xtc', "OPLS 0.3 mol/L", "red")
-OPLS3 = ProteinStructure('OPLS_sc3.gro', 'OPLS_sc3.xtc', "OPLS 0.6 mol/L", "pink")
-OPLS4 = ProteinStructure('OPLS_sc4.gro', 'OPLS_sc4.xtc', "OPLS 0.9 mol/L", "orange")
+OPLS1 = ProteinStructure('OPLS_sc1.gro', 'OPLS_sc1.xtc', "OPLS neutral", "#000033")
+OPLS2 = ProteinStructure('OPLS_sc2.gro', 'OPLS_sc2.xtc', "OPLS 0.3 mol/L", "#0000CC")
+OPLS3 = ProteinStructure('OPLS_sc3.gro', 'OPLS_sc3.xtc', "OPLS 0.6 mol/L", "#3333FF")
+OPLS4 = ProteinStructure('OPLS_sc4.gro', 'OPLS_sc4.xtc', "OPLS 0.9 mol/L", "#9999FF")
 
-MARTINI1 = ProteinStructure('MARTINI_sc1.gro', 'MARTINI_sc1.xtc', 'MARTINI neutral', 'blue')
-MARTINI2 = ProteinStructure('MARTINI_sc2.gro', 'MARTINI_sc2.xtc', 'MARTINI 0.3 mol/L', 'red')
-MARTINI3 = ProteinStructure('MARTINI_sc3.gro', 'MARTINI_sc3.xtc', 'MARTINI 0.6 mol/L', 'pink')
-MARTINI4 = ProteinStructure('MARTINI_sc4.gro', 'MARTINI_sc4.xtc', 'MARTINI 0.9 mol/L', 'orange')
+MARTINI1 = ProteinStructure('MARTINI_sc1.gro', 'MARTINI_sc1.xtc', 'MARTINI neutral', '#660033')
+MARTINI2 = ProteinStructure('MARTINI_sc2.gro', 'MARTINI_sc2.xtc', 'MARTINI 0.3 mol/L', '#CC0066')
+MARTINI3 = ProteinStructure('MARTINI_sc3.gro', 'MARTINI_sc3.xtc', 'MARTINI 0.6 mol/L', '#FF662B')
+MARTINI4 = ProteinStructure('MARTINI_sc4.gro', 'MARTINI_sc4.xtc', 'MARTINI 0.9 mol/L', '#FFCCE5')
 
 proteins = [OPLS1, OPLS2, OPLS3, OPLS4, MARTINI1, MARTINI2, MARTINI3, MARTINI4]
-labels = [p.label for p in proteins]
-colors = [p.color for p in proteins]
-r_gyrs = [p.r_gyr() for p in proteins]
 
-construct_plot(r_gyrs, colors=colors, labels=labels)
+
+rgyr_plot(proteins)
 
 # OPLS_protein = ProteinStructure("OPLS_gro.gro", "OPLS_xtc.xtc", "OPLS", "blue")
 # MARTINI_protein = ProteinStructure("MARTINI_gro.gro", "MARTINI_xtc.xtc", "MARTINI", "orange")
