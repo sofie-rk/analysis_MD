@@ -1,30 +1,39 @@
 import MDAnalysis as mda
-from ProteinStructure import *
+from ProteinAnalysisTrajectory import *
 import matplotlib.pyplot as plt
 
-#from construct_plots import construct_plot
-from construct_plots import rgyr_plot
+from construct_plots import rgyr_plot, rgyr_error
 
+noss_lysozyme = ProteinAnalysisTrajectory('noss_md_0_1.gro', 'noss_md_0_1.xtc', color='blue', label='MARTINI - no secondary structure')
+ss_lysozyme = ProteinAnalysisTrajectory('md_0_1.gro', 'md_0_1.xtc', color='black', label='MARTINI - specifying secondary structure')
+charmm_lysozyme = ProteinAnalysisTrajectory('charmm_md_0_1.gro', 'charmm_md_0_1.xtc', color='red', label='CHARMM')
+opls_lysozyme = ProteinAnalysisTrajectory('OPLS_md_0_1.gro', 'OPLS_md_0_1.xtc', color='green', label='OPLS')
 
-OPLS1 = ProteinStructure('OPLS_sc1.gro', 'OPLS_sc1.xtc', "OPLS neutral", "#000033")
-OPLS2 = ProteinStructure('OPLS_sc2.gro', 'OPLS_sc2.xtc', "OPLS 0.3 mol/L", "#0000CC")
-OPLS3 = ProteinStructure('OPLS_sc3.gro', 'OPLS_sc3.xtc', "OPLS 0.6 mol/L", "#3333FF")
-OPLS4 = ProteinStructure('OPLS_sc4.gro', 'OPLS_sc4.xtc', "OPLS 0.9 mol/L", "#9999FF")
-
-MARTINI1 = ProteinStructure('MARTINI_sc1.gro', 'MARTINI_sc1.xtc', 'MARTINI neutral', '#660033')
-MARTINI2 = ProteinStructure('MARTINI_sc2.gro', 'MARTINI_sc2.xtc', 'MARTINI 0.3 mol/L', '#CC0066')
-MARTINI3 = ProteinStructure('MARTINI_sc3.gro', 'MARTINI_sc3.xtc', 'MARTINI 0.6 mol/L', '#FF662B')
-MARTINI4 = ProteinStructure('MARTINI_sc4.gro', 'MARTINI_sc4.xtc', 'MARTINI 0.9 mol/L', '#FFCCE5')
-
-proteins = [OPLS1, OPLS2, OPLS3, OPLS4, MARTINI1, MARTINI2, MARTINI3, MARTINI4]
-
-
+proteins = [noss_lysozyme, ss_lysozyme, charmm_lysozyme, opls_lysozyme]
 rgyr_plot(proteins)
+rgyr_error(noss_lysozyme, [ss_lysozyme, charmm_lysozyme, opls_lysozyme])
+rgyr_error(ss_lysozyme, [noss_lysozyme, charmm_lysozyme, opls_lysozyme])
 
-# OPLS_protein = ProteinStructure("OPLS_gro.gro", "OPLS_xtc.xtc", "OPLS", "blue")
-# MARTINI_protein = ProteinStructure("MARTINI_gro.gro", "MARTINI_xtc.xtc", "MARTINI", "orange")
-# CHARMM_protein = ProteinStructure("CHARMM_gro.gro", "CHARMM_xtc.xtc", label="CHARMM27", color="red")
-# AMBER_protein = ProteinStructure("AMBER_gro.gro", "AMBER_xtc.xtc", label="AMBER", color="green")
+
+# OPLS1 = ProteinAnalysisTrajectory('OPLS_sc1.gro', 'OPLS_sc1.xtc', "OPLS neutral", "#000033")
+# OPLS2 = ProteinAnalysisTrajectory('OPLS_sc2.gro', 'OPLS_sc2.xtc', "OPLS 0.3 mol/L", "#0000CC")
+# OPLS3 = ProteinAnalysisTrajectory('OPLS_sc3.gro', 'OPLS_sc3.xtc', "OPLS 0.6 mol/L", "#3333FF")
+# OPLS4 = ProteinAnalysisTrajectory('OPLS_sc4.gro', 'OPLS_sc4.xtc', "OPLS 0.9 mol/L", "#9999FF")
+
+# MARTINI1 = ProteinAnalysisTrajectory('MARTINI_sc1.gro', 'MARTINI_sc1.xtc', 'MARTINI neutral', '#660033')
+# MARTINI2 = ProteinAnalysisTrajectory('MARTINI_sc2.gro', 'MARTINI_sc2.xtc', 'MARTINI 0.3 mol/L', '#CC0066')
+# MARTINI3 = ProteinAnalysisTrajectory('MARTINI_sc3.gro', 'MARTINI_sc3.xtc', 'MARTINI 0.6 mol/L', '#FF662B')
+# MARTINI4 = ProteinAnalysisTrajectory('MARTINI_sc4.gro', 'MARTINI_sc4.xtc', 'MARTINI 0.9 mol/L', '#FFCCE5')
+
+# proteins = [OPLS1, OPLS2, OPLS3, OPLS4, MARTINI1, MARTINI2, MARTINI3, MARTINI4]
+
+
+# rgyr_plot(proteins)
+
+# OPLS_protein = ProteinAnalysisTrajectory("OPLS_gro.gro", "OPLS_xtc.xtc", "OPLS", "blue")
+# MARTINI_protein = ProteinAnalysisTrajectory("MARTINI_gro.gro", "MARTINI_xtc.xtc", "MARTINI", "orange")
+# CHARMM_protein = ProteinAnalysisTrajectory("CHARMM_gro.gro", "CHARMM_xtc.xtc", label="CHARMM27", color="red")
+# AMBER_protein = ProteinAnalysisTrajectory("AMBER_gro.gro", "AMBER_xtc.xtc", label="AMBER", color="green")
 
 # OPLS_rgyr = OPLS_protein.r_gyr()
 # MARTINI_rgyr = MARTINI_protein.r_gyr()
