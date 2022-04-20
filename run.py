@@ -25,17 +25,29 @@ four_121212 = ProteinAnalysisTrajectory('5.gro', '5_noPBC.xtc', label='12nm x 12
 two_compare = ProteinAnalysisTrajectory('2.gro', '2_noPBC.xtc', label='10nm x 10nm x 10nm', color='black')
 three_compare = ProteinAnalysisTrajectory('3.gro', '3_noPBC.xtc', label='10nm x 10nm x 10nm', color='red')
 
+shorter_eq = ProteinAnalysisTrajectory('3.gro', '3_noPBC.xtc', label='shorter eq', color='green')
+longer_eq = ProteinAnalysisTrajectory('longer_eq.gro', 'longer_eq.xtc', label='Longer eq', color='purple')
+
+mdp_files = ProteinAnalysisTrajectory('mdp-file-test.gro', 'mdp-file-test.xtc', label='new mdp-file', color='orange')
+
 compare_1_2_3 = [one, two, three_nopbc]
 compare_ss = [three_ss, five_ss]
 compare_box_size = [three_101010, four_121212]
 compare_pbc = [three, three_nopbc]
 compare = [two_compare, three_compare]
 
+compare_eq_time = [longer_eq, shorter_eq]
+
+compare_mdp_files = [mdp_files, three_101010]
+
 #rgyr_plot(compare_1_2_3)
-rgyr_plot(compare_ss, title="MARTINI lysozyme - secondary structure analysis")
-rgyr_plot(compare_box_size, title="Box size")
-rgyr_plot(compare, title='Same conditions')
+# rgyr_plot(compare_ss, title="MARTINI lysozyme - secondary structure analysis")
+# rgyr_plot(compare_box_size, title="Box size")
+# rgyr_plot(compare, title='Same conditions')
 #rgyr_plot(compare_pbc)
+rgyr_plot(compare_eq_time)
+
+#rgyr_plot(compare_mdp_files)
 
 #proteins = [ss_lysozyme, one, two]
 

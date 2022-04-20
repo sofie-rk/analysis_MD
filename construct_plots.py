@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-def rgyr_plot(proteins, title='Radius of gyration'):
+def rgyr_plot(proteins, title='', xlim=None, ylim=None, loc_legend='lower right', line_type='-'):
 
     labels = [p.label for p in proteins]
     colors = [p.color for p in proteins]
@@ -10,14 +10,17 @@ def rgyr_plot(proteins, title='Radius of gyration'):
 
     for i in range(len(proteins)):
 
-        plt.plot(r_gyrs[i].index/1000, r_gyrs[i]['Radius of gyration [Å]'], color=colors[i], label=labels[i])
+        plt.plot(r_gyrs[i].index/1000, r_gyrs[i]['Radius of gyration [Å]'], line_type, color=colors[i], label=labels[i])
 
     plt.ylabel("Radius of gyration [Å]")
     plt.xlabel("Time [ns]")
     plt.title(title)
-    plt.legend()
+    plt.legend(loc=loc_legend)
     plt.grid(True)
-    #plt.xlim(0,200)
+    if (xlim != None):
+        plt.xlim(xlim)
+    if (ylim != None):
+        plt.ylim(ylim)
     plt.show()
 
 def rgyr_error(protein, proteins):
