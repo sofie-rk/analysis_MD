@@ -2,11 +2,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import MDAnalysis as mda
 from MDAnalysis.tests.datafiles import PSF, DCD, GRO, XTC
+
 print(mda.__version__)
 
 u = mda.Universe(PSF, DCD)
 
-structure = mda.Universe("md_0_1.gro", "md_0_1.xtc")
+structure = mda.Universe("./raw_files//surf_prot_vacuum/4surf_prot_vacuum.gro", "./raw_files//surf_prot_vacuum/4surf_prot_vacuum.xtc")
 print(structure)
 print(len(structure.trajectory))
 print(hasattr(structure, 'trajectory'))
@@ -21,7 +22,7 @@ print('\n.select_atoms: \n', structure.select_atoms('resname GLU'))
 print('\n.select_atoms...n_residues: \n', structure.select_atoms('resid 50-100').n_residues)
 
 
-print('\n.select_atoms.positions: \n', structure.select_atoms('resid 1-5 and name CA').positions)
+print('\n.select_atoms.positions: \n', structure.select_atoms('resid 1-5').positions)
 
 
 print("******************************")
@@ -44,10 +45,19 @@ rgyr_df.index.name = 'Time (ps)'
 
 #print(len('CCHHHHHHHHHCCEEEEEECTTSCEEEETTEEEESSSCHHHHHHHHHHHHTSCCTTBCCHHHHHHHHHHHHHHHHHHHHHCTTTHHHHHHSCHHHHHHHHHHHHHHHHHHHHTCHHHHHHHHTTCHHHHHHHHHSSHHHHHSHHHHHHHHHHHHHSSSGGGC'))
 
-print(len('CBCCHHHHHHHHHHTTCTTBTTBCTHHHHHHHHHHTSSBTTCEECCSSSCCEETTTTEETTTTEECSSCTTCCCTTCEEGGGGGSSSCHHHHHHHHHHHHHSSGGGGSHHHHHHTTTSCGGGSSTTCCC'))
+#print(len('CBCCHHHHHHHHHHTTCTTBTTBCTHHHHHHHHHHTSSBTTCEECCSSSCCEETTTTEETTTTEECSSCTTCCCTTCEEGGGGGSSSCHHHHHHHHHHHHHSSGGGGSHHHHHHTTTSCGGGSSTTCCC'))
 
 # plt.plot(time, rgyr)
 # plt.xlabel('Time (ps)')
 # plt.ylabel('Radius of gyration (nm)')
 # plt.show()
+
+C = structure.select_atoms('protein')
+time2 = []
+center = []
+for ts in structure.trajectory:
+    time.append(structure.trajectory.time)
+    center.append(C.atoms.center_of_geometry())
+
+print(center[0:10])
 
