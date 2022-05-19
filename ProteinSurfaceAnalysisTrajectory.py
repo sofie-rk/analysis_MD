@@ -1,5 +1,7 @@
 
+from tabnanny import verbose
 import MDAnalysis as mda
+import MDAnalysis.analysis.rms as rms
 from numpy import inf
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -15,7 +17,6 @@ class ProteinSurfaceAnalysisTrajectory:
 
         self.protein_structure = mda.Universe("./raw_files/"+path_file_gro, "./raw_files/"+path_file_xtc)
 
-        #self.z_center_of_geometry_df, self.rgyr_df, self.z_min_distance_df, self.residues_within_adslimit = self.protein_information()
 
     def r_gyr(self):
         rgyr = []
@@ -25,23 +26,44 @@ class ProteinSurfaceAnalysisTrajectory:
             time.append(self.protein_structure.trajectory.time)
             rgyr.append(protein.radius_of_gyration())
         
-        rgyr_df = pd.DataFrame(rgyr, columns=['Radius of gyration [Å]'], index=time)
+        rgyr_df = pd.DataFrame(rgyr, columns=[column_rgyr], index=time)
         rgyr_df.index.name = 'Time [ps]'
 
         return rgyr_df
+
+    def surface_values(self):
+        surface_val = []
+        time = []
+        surface = self.protein_structure.select_atoms('resname 1SURF')
+
+        for t in self.protein_structure.trajectory:
+            time.append(self.protein_structure.trajectory.time)
+
+            positions = surface.positions
+            t = []
+            for pos in positions:
+                t.append(pos[2])
+            t.sort()
+            surface_val.append((sum(t[600:])/len(t[600:]))/10)
+        
+        return surface_val
+
+    def rmsd(self):
+        rmsd = []
+        time = []
+        protein = self.protein_structure.select_atoms('protein')
+
+        return 0
     
     def zcoord_center_of_geometry(self):
         time = []
         z_center_of_geometry = []
 
         protein = self.protein_structure.select_atoms('protein')
-
         for t in self.protein_structure.trajectory:
-
             time.append(self.protein_structure.trajectory.time)
-
-            z_center_of_geometry.append(protein.center_of_geometry()[2]/10)        
-
+            z_center_of_geometry.append(protein.center_of_geometry()[2]/10)      
+        
         df_z_center_of_geometry = pd.DataFrame(z_center_of_geometry, columns=[column_center_of_geometry], index=time)
         
         return df_z_center_of_geometry
@@ -53,7 +75,6 @@ class ProteinSurfaceAnalysisTrajectory:
         protein = self.protein_structure.select_atoms('protein')
 
         for t in self.protein_structure.trajectory:
-
             time.append(self.protein_structure.trajectory.time)
 
             min_z_current = inf
@@ -62,12 +83,10 @@ class ProteinSurfaceAnalysisTrajectory:
                 if pos[-1]/10 < min_z_current:
                     min_z_current = pos[-1]/10
     
-
             z_min_distance.append(min_z_current)
 
         df_min_z = pd.DataFrame(z_min_distance, columns=[column_min_distance], index=time)
 
-        
         return df_min_z
 
     def residues_within_limit(self, limit):
@@ -77,13 +96,12 @@ class ProteinSurfaceAnalysisTrajectory:
         protein = self.protein_structure.select_atoms('protein')
 
         for t in self.protein_structure.trajectory:
-
             time.append(self.protein_structure.trajectory.time)
 
             number_of_resiudes_current = 0
             positions = protein.positions
             for pos in positions:
-                if pos[-1]/10 < adsorption_limit:
+                if pos[-1]/10 < limit:
                     number_of_resiudes_current += 1
 
             residues_within_limit.append(number_of_resiudes_current)
@@ -98,19 +116,25 @@ class ProteinSurfaceAnalysisTrajectory:
         z_coord_max = []
         z_coord_min = []
 
+        z_positions = []
+
         surface = self.protein_structure.select_atoms('resname 1SURF')
         for t in self.protein_structure.trajectory:
             time.append(self.protein_structure.trajectory.time)
+
+            z_pos = []
 
             positions = surface.positions
             zmin = inf
             zmax = -inf
             for pos in positions:
+                z_pos.append(pos[2])
                 if (pos[2] > zmax):
                     zmax = pos[2]
                 if (pos[2] < zmin):
                     zmin = pos[2]
-                
+            
+            z_positions.append(z_pos)
             z_coord_max.append(zmax/10)
             z_coord_min.append(zmin/10)
 
@@ -119,6 +143,22 @@ class ProteinSurfaceAnalysisTrajectory:
         plt.grid(True)
         plt.legend()
         plt.show()
+
+        max_displacement = []
+        for i in range(1,len(z_positions)):
+            max_displacement_current = 0
+            for j in range(len(z_positions[0])):
+                displacement = abs(z_positions[i][j] - z_positions[i-1][j])
+                if (displacement > max_displacement_current):
+                    max_displacement_current = displacement
+            
+            max_displacement.append(max_displacement_current)
+
+        plt.plot(time[1:], max_displacement)
+        plt.grid(True)
+        plt.show()
+
+    
 
    
 
