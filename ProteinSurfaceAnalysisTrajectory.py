@@ -1,7 +1,7 @@
 
 from tabnanny import verbose
 import MDAnalysis as mda
-import MDAnalysis.analysis.rms as rms
+from MDAnalysis.analysis import rms
 from numpy import inf
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -53,7 +53,18 @@ class ProteinSurfaceAnalysisTrajectory:
         time = []
         protein = self.protein_structure.select_atoms('protein')
 
-        return 0
+        R = rms.RMSD(self.protein_structure,
+                        self.protein_structure)
+        R.run()
+        rmsd_array = R.rmsd
+        
+        for row in rmsd_array:
+            time.append(row[1])
+            rmsd.append(row[2])
+        
+        df_rmsd = pd.DataFrame(rmsd, columns=[columns_rmsd], index=time)
+        
+        return df_rmsd
     
     def zcoord_center_of_geometry(self):
         time = []

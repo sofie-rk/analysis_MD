@@ -2,6 +2,30 @@ import matplotlib.pyplot as plt
 from sqlalchemy import column
 from constants import *
 
+def plot_rmsd(proteins, title='', xlim=None, ylim=None, loc_legend='lower right', line_type='-'):
+
+    labels = [p.label for p in proteins]
+    colors = [p.color for p in proteins]
+    rmsd = [p.rmsd() for p in proteins]
+
+    fig = plt.figure()
+
+    for i in range(len(proteins)):
+
+        plt.plot(rmsd[i].index/1000, rmsd[i][columns_rmsd], line_type, color=colors[i], label=labels[i])
+
+    plt.ylabel("RMSD")
+    plt.xlabel("Time [ns]")
+    plt.title(title)
+    plt.legend(loc=loc_legend)
+    plt.grid(True)
+    if (xlim != None):
+        plt.xlim(xlim)
+    if (ylim != None):
+        plt.ylim(ylim)
+    plt.show()
+
+
 def plot_rgyr(proteins, title='', xlim=None, ylim=None, loc_legend='lower right', line_type='-'):
 
     labels = [p.label for p in proteins]
@@ -30,14 +54,15 @@ def plot_zcoord_center_of_geometry(proteins, title='', loc_legend='lower right',
     labels = [p.label for p in proteins]
     colors = [p.color for p in proteins]
     z_coord = [p.zcoord_center_of_geometry() for p in proteins]
+    surf_val = [p.surface_values() for p in proteins]
 
     fig = plt.figure()
 
     for i in range(len(proteins)):
 
-        plt.plot(z_coord[i].index/1000, (z_coord[i][column_center_of_geometry])-surface_z, line_type, color=colors[i], label=labels[i])
+        plt.plot(z_coord[i].index/1000, (z_coord[i][column_center_of_geometry])-surf_val[i], line_type, color=colors[i], label=labels[i])
 
-    plt.ylabel("Distance from the surface [nm] (center of geometry)")
+    plt.ylabel("Distance between center of protein and the surface [nm]")
     plt.xlabel(xlabel_time)
     plt.title(title)
     plt.legend(loc=loc_legend)
@@ -48,14 +73,15 @@ def plot_zcoord_center_of_geometry(proteins, title='', loc_legend='lower right',
         plt.ylim(ylim)
     plt.show()
 
-def plot_z_min_distance(proteins, z_surface=3.2, title='', loc_legend='lower right', xlim=None, ylim=None):
+def plot_z_min_distance(proteins, title='', loc_legend='lower right', xlim=None, ylim=None):
 
     labels = [p.label for p in proteins]
     colors = [p.color for p in proteins]
     min_z = [p.z_min_distance() for p in proteins]
+    surf_val = [p.surface_values() for p in proteins]
 
     for i in range(len(proteins)):
-        plt.plot(min_z[i].index/1000, min_z[i][column_min_distance]-z_surface , color=colors[i], label=labels[i])
+        plt.plot(min_z[i].index/1000, min_z[i][column_min_distance]-surf_val[i] , color=colors[i], label=labels[i])
 
     plt.ylabel('Minimum distance between protein molecule and surface [nm]')
     plt.xlabel(xlabel_time)
