@@ -53,7 +53,11 @@ column_rgyr = 'rgyr'
 column_min_distance = 'minimum_distance'
 column_number_of_residues = 'number_of_residues'
 columns_rmsd = 'RMSD'
+columns_hphilres = 'hphil_res_within_limit'
+columns_hphobres = 'hphob_res_within_limit'
 
 hphob_surf = 'Hydrophobic Surface'
 
 adsorption_limit = 5.0
+
+

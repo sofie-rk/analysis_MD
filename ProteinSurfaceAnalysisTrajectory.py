@@ -6,6 +6,7 @@ from numpy import inf
 import pandas as pd
 import matplotlib.pyplot as plt
 from constants import *
+from hphil_hphob_aa import aa_properties
 
 class ProteinSurfaceAnalysisTrajectory:
 
@@ -100,7 +101,7 @@ class ProteinSurfaceAnalysisTrajectory:
 
         return df_min_z
 
-    def residues_within_limit(self, limit):
+    def residues_within_limit_number(self, limit):
         time = []
         residues_within_limit = []
 
@@ -108,6 +109,7 @@ class ProteinSurfaceAnalysisTrajectory:
 
         for t in self.protein_structure.trajectory:
             time.append(self.protein_structure.trajectory.time)
+
 
             number_of_resiudes_current = 0
             positions = protein.positions
@@ -120,6 +122,50 @@ class ProteinSurfaceAnalysisTrajectory:
         df_residues_within_limit= pd.DataFrame(residues_within_limit, columns=[column_number_of_residues], index=time)
         
         return df_residues_within_limit
+
+    def residues_within_limit(self, limit=0.5):
+
+        time = []
+        hphil_res = []
+        hphob_res = []
+
+        surface_values = self.surface_values()
+
+        protein = self.protein_structure.select_atoms('protein')
+
+        c = 0
+        for t in self.protein_structure.trajectory:
+
+            time.append(self.protein_structure.trajectory.time/1000)
+
+            current_hphil_res = 0
+            current_hphob_res = 0
+
+            positions = protein.positions
+            resnames = protein.resnames
+
+            for i in range(len(positions)):
+                if positions[i][2]/10 < surface_values[c] + limit:
+                    resname = resnames[i]
+                    if (aa_properties(resname) == 'hphob'):
+                        current_hphob_res += 1
+                    elif (aa_properties(resname) == 'hphil'):
+                        current_hphil_res += 1
+                    else:
+                        print(resname)
+
+            hphil_res.append(current_hphil_res/len(resnames))
+            hphob_res.append(current_hphob_res/len(resnames))
+
+            c+=1
+        df = pd.DataFrame({ columns_hphilres: hphil_res, 
+                            columns_hphobres: hphob_res}, 
+                            index=time)
+    
+        df_hphilres_within_limit = pd.DataFrame(hphil_res, columns=[columns_hphilres], index=time)
+        df_hphobres_within_limit = pd.DataFrame(hphob_res, columns=[columns_hphobres], index=time)
+
+        return df#df_hphilres_within_limit, df_hphobres_within_limit
 
     def surface_positions(self):
 

@@ -1,6 +1,16 @@
 import matplotlib.pyplot as plt
-from sqlalchemy import column
 from constants import *
+from labels import *
+
+import matplotlib as mpl
+
+params = {'legend.fontsize': 'medium',
+            'figure.figsize': (12,6),
+            'axes.labelsize': 'large',
+            'axes.titlesize': 'x-large',
+
+}
+mpl.rcParams.update(params)
 
 def plot_rmsd(proteins, title='', xlim=None, ylim=None, loc_legend='lower right', line_type='-'):
 
@@ -12,7 +22,7 @@ def plot_rmsd(proteins, title='', xlim=None, ylim=None, loc_legend='lower right'
 
     for i in range(len(proteins)):
 
-        plt.plot(rmsd[i].index/1000, rmsd[i][columns_rmsd], line_type, color=colors[i], label=labels[i])
+        fig.plot(rmsd[i].index/1000, rmsd[i][columns_rmsd], line_type, color=colors[i], label=labels[i])
 
     plt.ylabel("RMSD")
     plt.xlabel("Time [ns]")
@@ -62,7 +72,7 @@ def plot_zcoord_center_of_geometry(proteins, title='', loc_legend='lower right',
 
         plt.plot(z_coord[i].index/1000, (z_coord[i][column_center_of_geometry])-surf_val[i], line_type, color=colors[i], label=labels[i])
 
-    plt.ylabel("Distance between center of protein and the surface [nm]")
+    plt.ylabel(ylabel_cog)
     plt.xlabel(xlabel_time)
     plt.title(title)
     plt.legend(loc=loc_legend)
@@ -83,7 +93,7 @@ def plot_z_min_distance(proteins, title='', loc_legend='lower right', xlim=None,
     for i in range(len(proteins)):
         plt.plot(min_z[i].index/1000, min_z[i][column_min_distance]-surf_val[i] , color=colors[i], label=labels[i])
 
-    plt.ylabel('Minimum distance between protein molecule and surface [nm]')
+    plt.ylabel(ylabel_mindist)
     plt.xlabel(xlabel_time)
     plt.title(title)
     plt.legend(loc=loc_legend)
@@ -117,3 +127,22 @@ def plot_residues_within_limit(proteins, adsorption_limit, title='', loc_legend=
     plt.show()
 
     return 0
+
+
+def plot_hphil_hphob_resiudes_within_limit(protein, title, limit=0.5):
+
+    color = protein.color
+    label = protein.color
+
+    df_hphil_res = protein.residues_within_limit(limit)
+
+    df_hphil_res.plot.area()
+    plt.legend(['Hydrophobic residues', 'Hydrophilic resiudes'])
+    plt.ylim(0,1.1)
+    plt.grid(True)
+    plt.xlabel(xlabel_time)
+    plt.title(title)
+    plt.show()
+    # plt.plot(df_hphil_res)
+    # plt.plot(df_hphob_res)
+    # plt.show()
