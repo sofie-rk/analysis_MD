@@ -14,3 +14,13 @@ label_vacuum = 'no water'
 
 ylabel_cog = 'd [nm]'
 ylabel_mindist = r'd$_{\mathrm{min}}$ [nm]'
+
+label_ss = 'Specified secondary structure'
+label_noss = 'No specified secondary structure'
+
+label_LIW = 'Lysozyme in water'
+
+label_OPLS = 'OPLS-AA'
+label_AMBER = 'AMBER99SB-ILDN'
+label_CHARMM = 'CHARMM27'
+label_MARTINI = 'MARTINI 3'

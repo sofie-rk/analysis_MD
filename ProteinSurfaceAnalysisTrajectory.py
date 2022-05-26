@@ -54,10 +54,11 @@ class ProteinSurfaceAnalysisTrajectory:
         time = []
         protein = self.protein_structure.select_atoms('protein')
 
-        R = rms.RMSD(self.protein_structure,
-                        self.protein_structure)
+        R = rms.RMSD(protein)
         R.run()
+
         rmsd_array = R.rmsd
+
         
         for row in rmsd_array:
             time.append(row[1])

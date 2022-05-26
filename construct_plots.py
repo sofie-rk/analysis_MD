@@ -22,10 +22,10 @@ def plot_rmsd(proteins, title='', xlim=None, ylim=None, loc_legend='lower right'
 
     for i in range(len(proteins)):
 
-        fig.plot(rmsd[i].index/1000, rmsd[i][columns_rmsd], line_type, color=colors[i], label=labels[i])
+        plt.plot(rmsd[i].index/1000, rmsd[i][columns_rmsd], line_type, color=colors[i], label=labels[i])
 
-    plt.ylabel("RMSD")
-    plt.xlabel("Time [ns]")
+    plt.ylabel("RMSD [Å]")
+    plt.xlabel(xlabel_time)
     plt.title(title)
     plt.legend(loc=loc_legend)
     plt.grid(True)
